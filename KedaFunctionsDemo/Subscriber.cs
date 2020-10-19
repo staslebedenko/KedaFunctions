@@ -10,7 +10,8 @@ namespace KedaFunctionsDemo
     public static class Subscriber
     {
         [FunctionName("Subscriber")]
-        public static async System.Threading.Tasks.Task RunAsync([QueueTrigger("k8queue", Connection = "AzureWebJobsStorage")]string myQueueItem,
+        public static async Task RunAsync(
+        [RabbitMQTrigger("k8queue", ConnectionStringSetting = "RabbitMQConnection")] string myQueueItem,
         ILogger log,
         CancellationToken cts,
         [Queue("k8queueresults", Connection = "AzureWebJobsStorage")] IAsyncCollector<string> messages)
