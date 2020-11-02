@@ -1,0 +1,8 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=k82storagek;AccountKey=T1YZQv/qhRegFqwy6hnQ7eviQ4qBocGJGC1Gm0xyx5FzVJF5sAEVcScgpiYc1JjjEJAQINj1noSMNSdZJozqpg==;EndpointSuffix=core.windows.net",
+        "RabbitMQConnection": "amqp://user:secret@20.67.128.53:5672",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+    }
+}
