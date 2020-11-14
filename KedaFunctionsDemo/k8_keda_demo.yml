@@ -142,6 +142,10 @@ metadata:
 spec:
   scaleTargetRef:
     deploymentName: k82-cluster
+  pollingInterval: 20 # default 30 sec
+  cooldownPeriod: 60 # default 300 sec or 5 min
+  minReplicaCount: 0 # scale down to zero
+  maxReplicaCount: 10 # 
   triggers:
   - type: azure-queue
     metadata:

@@ -11,14 +11,22 @@ namespace KedaFunctionsDemo
     {
         [FunctionName("Subscriber")]
         public static async Task RunAsync(
-        [RabbitMQTrigger("k8queue", ConnectionStringSetting = "RabbitMQConnection")] string myQueueItem,
+        [RabbitMQTrigger("k8queue", ConnectionStringSetting = "RabbitMQConnection")] string queueName,
         ILogger log,
         CancellationToken cts,
         [Queue("k8queueresults", Connection = "AzureWebJobsStorage")] IAsyncCollector<string> messages)
         {
-            log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
+            log.LogInformation($"C# Queue trigger function processed: {queueName}");
 
-            await messages.AddAsync($"Processed: {myQueueItem}", cts);
+            var prediction = $"Zoltar speaks! {queueName}, your rate will be '{RatePrediction()}'.";
+
+            await messages.AddAsync($"Processed: {queueName}", cts);
+        }
+
+        private static int RatePrediction()
+        {
+            var random = new Random();
+            return random.Next(20, 50);
         }
     }
 }
