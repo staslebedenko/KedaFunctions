@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 
 namespace KedaFunctionsDemo
 {
@@ -14,22 +15,32 @@ namespace KedaFunctionsDemo
     {
         [FunctionName("Publisher")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Publisher")] HttpRequest req,
             CancellationToken cts,
             ILogger log,
-            [RabbitMQ(ConnectionStringSetting = "RabbitMQConnection",QueueName = "k8queue")] out string message
+            [RabbitMQ(ConnectionStringSetting = "RabbitMQConnection", QueueName = "k8queue")] out string message
             )
         {
-            string name = req.Query["name"];
+            try
+            {
+                string name = req.Query["name"];
 
-            if(string.IsNullOrEmpty(name)){
+                if (string.IsNullOrEmpty(name))
+                {
+                    message = null;
+                    return new BadRequestObjectResult("Pass a name in the query string or in the request body to proceed.");
+                }
+
+                message = name;
+
+                return new OkObjectResult($"Hello, {name}. This HTTP triggered function executed successfully.");
+            }
+            catch (Exception ex)
+            {
                 message = null;
-                return new BadRequestObjectResult("Pass a name in the query string or in the request body to proceed.");
+                return new BadRequestObjectResult($"Exception {ex}");
             }
 
-            message = name;
-
-            return new OkObjectResult($"Hello, {name}. This HTTP triggered function executed successfully.");
         }
     }
 }
